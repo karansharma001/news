@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "./components/Navbar";
 import NewsMain from "./components/NewsMain";
+import { Route, Switch } from "react-router-dom";
 
 export class App extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ export class App extends Component {
   }
 
   handelCategory = async (category) => {
-    this.setState({ loading: true, data: []});
+    this.setState({ loading: true, data: [] });
     let url = `https://inshortsapi.vercel.app/news?category=${category}`;
     let rawData = await fetch(url);
     let parsedData = await rawData.json();
@@ -36,11 +37,15 @@ export class App extends Component {
   render() {
     return (
       <>
-        <Navbar handelCategory={this.handelCategory} />
-        <NewsMain
-          newsItems={this.state.data?.data}
-          loading={this.state.loading}
-        />
+        <Switch>
+          <Route exact path="/">
+            <Navbar handelCategory={this.handelCategory} />
+            <NewsMain
+              newsItems={this.state.data?.data}
+              loading={this.state.loading}
+            />
+          </Route>
+        </Switch>
       </>
     );
   }
